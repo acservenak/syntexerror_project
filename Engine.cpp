@@ -1,15 +1,57 @@
 #include "Engine.h"
 #include "RoomManager.h"
+#include "tinyxml2.h"
 
 Engine::Engine(int height, int weight)
 {
 	window.create(sf::VideoMode(height, weight), "TextGame", sf::Style::Close | sf::Style::Titlebar);
+	tinyxml2::XMLDocument doc;
+	roomList = {};
+	
+
+	if (doc.LoadFile( "rooms.xml" ) == false )
+	{
+		tinyxml2::XMLElement* pRoot = doc.FirstChildElement("rooms");
+		for (tinyxml2::XMLElement* currentRroom = pRoot->FirstChildElement("room"); currentRroom != NULL; currentRroom = currentRroom->NextSiblingElement())
+		{
+			std::string name = currentRroom->FirstChildElement("name")->GetText();
+			std::string prevRoomName = currentRroom->FirstChildElement("previousroomname")->GetText();
+			std::list<std::string> nextRoomsNames = {};
+			std::list<std::string> roomObjects = {};
+			tinyxml2::XMLElement* roomnames = currentRroom->FirstChildElement("nextrooms");
+			for (tinyxml2::XMLElement* nextRoomName = roomnames->FirstChildElement("roomname"); nextRoomName != NULL; nextRoomName = nextRoomName->NextSiblingElement())
+			{
+				nextRoomsNames.push_back(nextRoomName->GetText());
+			}
+			tinyxml2::XMLElement* objects = currentRroom->FirstChildElement("objects");
+			for (tinyxml2::XMLElement* object = objects->FirstChildElement("object"); object != NULL; object = object->NextSiblingElement())
+			{
+				roomObjects.push_back(object->GetText());
+			}
+			std::string storyText = currentRroom->FirstChildElement("text")->GetText();
+			std::string bgfilepath = currentRroom->FirstChildElement("bgfilename")->GetText();
+			roomList.push_back(Room(name, prevRoomName, nextRoomsNames, roomObjects, storyText, bgfilepath));
+		}
+	}
+	else
+	{
+		std::cout << "Cant load file";
+	}
+
+
 	Rmanager = RoomManager();
-	Rmanager.setCurrentRoom (Room("Test room text"));
+	Rmanager.setCurrentRoom(roomList.front());
 }
 
 void Engine::start()
 {
+
+	
+
+
+	
+	
+
 	sf::Font font;
 	if (!font.loadFromFile("fonts/arial.ttf"))
 	{
@@ -54,7 +96,7 @@ void Engine::start()
 				[](unsigned char c) { return std::tolower(c); });
 			if (plString == "use door")
 			{
-				Rmanager.setCurrentRoom(Room("Test room text 2 "));
+				//Rmanager.setCurrentRoom();
 				text.setString(Rmanager.getCurrentRoom().getStoryString());
 				playerInput.clear();
 				result.setString("");

@@ -10,6 +10,7 @@ private:
 	sf::RenderWindow window;
 	RoomManager Rmanager;
 	sf::Text text;
+	std::list<Room> roomList;
 public:
 	Engine(int height, int width); 
 	void start(); 

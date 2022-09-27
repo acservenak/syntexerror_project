@@ -5,7 +5,7 @@
 class Room
 {
 public:
-	Room(std::string Stest);
+	Room(std::string roomName, std::string previousRoomName, std::list<std::string> nextRoomsNames, std::list<std::string> objects, std::string storyText, std::string bgfilePath);
 	Room();
 	~Room();
 	std::string getStoryString() {
