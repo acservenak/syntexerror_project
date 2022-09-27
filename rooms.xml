@@ -14,6 +14,34 @@
 		<text>You are standing in front of the main gate...</text>
 		<bgfilename>empty</bgfilename>
 	</room>
+	<room>
+		<name>Garden</name>
+		<previousroomname>empty</previousroomname>
+		<nextrooms>
+			<roomname> Garden </roomname>
+			<roomname> Front door </roomname>
+		</nextrooms>
+		<objects>
+			<object> Keypad </object>
+			<object> Door </object>
+		</objects>
+		<text>You are standing in front of the main gate...</text>
+		<bgfilename>empty</bgfilename>
+	</room>
+	<room>
+		<name>Front Door</name>
+		<previousroomname>empty</previousroomname>
+		<nextrooms>
+			<roomname> Garden </roomname>
+			<roomname> Front door </roomname>
+		</nextrooms>
+		<objects>
+			<object> Keypad </object>
+			<object> Door </object>
+		</objects>
+		<text>You are standing in front of the main gate...</text>
+		<bgfilename>empty</bgfilename>
+	</room>
 </rooms>
 
 

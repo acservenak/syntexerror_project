@@ -6,45 +6,32 @@ Engine::Engine(int height, int weight)
 {
 	window.create(sf::VideoMode(height, weight), "TextGame", sf::Style::Close | sf::Style::Titlebar);
 	tinyxml2::XMLDocument doc;
-	Room test;
+	roomList = {};
 	
 
 	if (doc.LoadFile( "rooms.xml" ) == false )
 	{
-		//tinyxml2::XMLNode* pRoot = doc.RootElement();
-		//tinyxml2::XMLNode* pR2 = pRoot->FirstChild();
-		//tinyxml2::XMLElement* pElement = pR2->FirstChildElement("name");
-		//std::string roomname = pElement->Attribute("name"); // doc.FirstChildElement("rooms")->FirstChildElement("room")->FirstChildElement("name")->GetText(); //pElement->Attribute("name");
-		//std::cout << roomname;
 		tinyxml2::XMLElement* pRoot = doc.FirstChildElement("rooms");
-		tinyxml2::XMLElement* FirstRoom = pRoot->FirstChildElement("room");
-		std::string name = FirstRoom->FirstChildElement("name")->GetText();
-		std::string prevRoomName = FirstRoom->FirstChildElement("previousroomname")->GetText();
-		std::list<std::string> nextRoomsNames = {};
-		std::list<std::string> roomObjects = {};
-		tinyxml2::XMLElement* roomnames = FirstRoom->FirstChildElement("nextrooms");
-		for (tinyxml2::XMLElement* nextRoomName = roomnames->FirstChildElement("roomname"); nextRoomName != NULL; nextRoomName = nextRoomName->NextSiblingElement())
+		for (tinyxml2::XMLElement* currentRroom = pRoot->FirstChildElement("room"); currentRroom != NULL; currentRroom = currentRroom->NextSiblingElement())
 		{
-			nextRoomsNames.push_back(nextRoomName->GetText());
+			std::string name = currentRroom->FirstChildElement("name")->GetText();
+			std::string prevRoomName = currentRroom->FirstChildElement("previousroomname")->GetText();
+			std::list<std::string> nextRoomsNames = {};
+			std::list<std::string> roomObjects = {};
+			tinyxml2::XMLElement* roomnames = currentRroom->FirstChildElement("nextrooms");
+			for (tinyxml2::XMLElement* nextRoomName = roomnames->FirstChildElement("roomname"); nextRoomName != NULL; nextRoomName = nextRoomName->NextSiblingElement())
+			{
+				nextRoomsNames.push_back(nextRoomName->GetText());
+			}
+			tinyxml2::XMLElement* objects = currentRroom->FirstChildElement("objects");
+			for (tinyxml2::XMLElement* object = objects->FirstChildElement("object"); object != NULL; object = object->NextSiblingElement())
+			{
+				roomObjects.push_back(object->GetText());
+			}
+			std::string storyText = currentRroom->FirstChildElement("text")->GetText();
+			std::string bgfilepath = currentRroom->FirstChildElement("bgfilename")->GetText();
+			roomList.push_back(Room(name, prevRoomName, nextRoomsNames, roomObjects, storyText, bgfilepath));
 		}
-		tinyxml2::XMLElement* objects = FirstRoom->FirstChildElement("objects");
-		for (tinyxml2::XMLElement* object = objects->FirstChildElement("object"); object != NULL; object = object->NextSiblingElement())
-		{
-			roomObjects.push_back(object->GetText());
-		}
-		std::string storyText = FirstRoom->FirstChildElement("text")->GetText();
-		std::string bgfilepath = FirstRoom->FirstChildElement("bgfilename")->GetText();
-		test = Room(name, prevRoomName, nextRoomsNames, roomObjects, storyText, bgfilepath);
-		/*for (
-
-			auto* pListElement = pRoot->FirstChildElement("room");
-			pListElement != nullptr;
-			pListElement = pListElement->NextSiblingElement("room"))
-		{
-			std::string name = pListElement->Attribute("name");
-			std::string prevroomname = pListElement->Attribute("previousroomname");
-			std::cout << name << std::endl;
-		}*/
 	}
 	else
 	{
@@ -53,7 +40,7 @@ Engine::Engine(int height, int weight)
 
 
 	Rmanager = RoomManager();
-	Rmanager.setCurrentRoom(test);
+	Rmanager.setCurrentRoom(roomList.front());
 }
 
 void Engine::start()
