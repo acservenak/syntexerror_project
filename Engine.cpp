@@ -1,15 +1,70 @@
 #include "Engine.h"
 #include "RoomManager.h"
+#include "tinyxml2.h"
 
 Engine::Engine(int height, int weight)
 {
 	window.create(sf::VideoMode(height, weight), "TextGame", sf::Style::Close | sf::Style::Titlebar);
+	tinyxml2::XMLDocument doc;
+	Room test;
+	
+
+	if (doc.LoadFile( "rooms.xml" ) == false )
+	{
+		//tinyxml2::XMLNode* pRoot = doc.RootElement();
+		//tinyxml2::XMLNode* pR2 = pRoot->FirstChild();
+		//tinyxml2::XMLElement* pElement = pR2->FirstChildElement("name");
+		//std::string roomname = pElement->Attribute("name"); // doc.FirstChildElement("rooms")->FirstChildElement("room")->FirstChildElement("name")->GetText(); //pElement->Attribute("name");
+		//std::cout << roomname;
+		tinyxml2::XMLElement* pRoot = doc.FirstChildElement("rooms");
+		tinyxml2::XMLElement* FirstRoom = pRoot->FirstChildElement("room");
+		std::string name = FirstRoom->FirstChildElement("name")->GetText();
+		std::string prevRoomName = FirstRoom->FirstChildElement("previousroomname")->GetText();
+		std::list<std::string> nextRoomsNames = {};
+		std::list<std::string> roomObjects = {};
+		tinyxml2::XMLElement* roomnames = FirstRoom->FirstChildElement("nextrooms");
+		for (tinyxml2::XMLElement* nextRoomName = roomnames->FirstChildElement("roomname"); nextRoomName != NULL; nextRoomName = nextRoomName->NextSiblingElement())
+		{
+			nextRoomsNames.push_back(nextRoomName->GetText());
+		}
+		tinyxml2::XMLElement* objects = FirstRoom->FirstChildElement("objects");
+		for (tinyxml2::XMLElement* object = objects->FirstChildElement("object"); object != NULL; object = object->NextSiblingElement())
+		{
+			roomObjects.push_back(object->GetText());
+		}
+		std::string storyText = FirstRoom->FirstChildElement("text")->GetText();
+		std::string bgfilepath = FirstRoom->FirstChildElement("bgfilename")->GetText();
+		test = Room(name, prevRoomName, nextRoomsNames, roomObjects, storyText, bgfilepath);
+		/*for (
+
+			auto* pListElement = pRoot->FirstChildElement("room");
+			pListElement != nullptr;
+			pListElement = pListElement->NextSiblingElement("room"))
+		{
+			std::string name = pListElement->Attribute("name");
+			std::string prevroomname = pListElement->Attribute("previousroomname");
+			std::cout << name << std::endl;
+		}*/
+	}
+	else
+	{
+		std::cout << "Cant load file";
+	}
+
+
 	Rmanager = RoomManager();
-	Rmanager.setCurrentRoom (Room("Test room text"));
+	Rmanager.setCurrentRoom(test);
 }
 
 void Engine::start()
 {
+
+	
+
+
+	
+	
+
 	sf::Font font;
 	if (!font.loadFromFile("fonts/arial.ttf"))
 	{
@@ -54,7 +109,7 @@ void Engine::start()
 				[](unsigned char c) { return std::tolower(c); });
 			if (plString == "use door")
 			{
-				Rmanager.setCurrentRoom(Room("Test room text 2 "));
+				//Rmanager.setCurrentRoom();
 				text.setString(Rmanager.getCurrentRoom().getStoryString());
 				playerInput.clear();
 				result.setString("");
