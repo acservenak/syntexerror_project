@@ -1,6 +1,6 @@
 #include "Room.h"
 
-Room::Room(std::string roomNameP, std::string previousRoomNameP, std::list<std::string> nextRoomsNamesP, std::list<std::string> objects, std::string storyTextP, std::string bgfilePath)
+Room::Room(std::string roomNameP, std::string previousRoomNameP, std::list<std::string> nextRoomsNamesP, std::vector<Object> objects, std::string storyTextP, std::string bgfilePath)
 {
 	roomName = roomNameP;
 	previousRoomName = previousRoomNameP;
@@ -13,8 +13,6 @@ Room::Room(std::string roomNameP, std::string previousRoomNameP, std::list<std::
 
 Room::Room()
 {
-	storyText = "default text";
-	objectList = { "Red door", "Red key", "lamp" };
 }
 
 

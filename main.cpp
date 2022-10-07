@@ -1,15 +1,8 @@
 
 #include "Engine.h"
 
-
-
-
 int main() {
-
-
-	Engine myEngine(800, 600);
+	Engine myEngine(1600, 900);
 	myEngine.start(); 
-
-
 	return 0;
 }
