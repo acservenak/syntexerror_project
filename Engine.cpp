@@ -117,6 +117,7 @@ void Engine::start()
 				if (Rmanager.getCurrentRoom().getRoomName() == "Mail" and plString == "")
 				{
 					Rmanager.setCurrentRoom(roomList[1]);
+					Imanager = InputManager(Rmanager);
 					text.setString(Rmanager.getCurrentRoom().getStoryString());
 				}
 				else if (plString != "") {
@@ -128,12 +129,14 @@ void Engine::start()
 								currentRoomIndex = i;
 							}
 						}
-						if (isInKeypad == true and command[0] == "7823")
+						if (isInKeypad == true && command[0] == "7823")
 						{
 							isInKeypad = false;
 							result.setString("Opened the gate");
 							
 							roomList[currentRoomIndex].getObjectList()->front().setUsed(true);
+							Rmanager.setCurrentRoom(roomList[currentRoomIndex]);
+							Imanager = InputManager(Rmanager);
 						} 
 						else if (command[0] == "use")
 						{
@@ -155,8 +158,9 @@ void Engine::start()
 										{
 											std::vector<Object> vector = * roomList[currentRoomIndex].getObjectList();
 											vector[j].setUsed(true);
+											Rmanager.setCurrentRoom(roomList[currentRoomIndex]);
+											Imanager = InputManager(Rmanager);
 											result.setString("You have opened a lock");
-
 										}
 										j++;
 									}
@@ -166,7 +170,69 @@ void Engine::start()
 
 						}
 						else if (command[0] == "go") {
-
+							if (command[1] == "to")
+							{
+								int targetIndex = -1;
+								for (int i = 0; i < roomList.size(); i++)
+								{
+									if (command.size() > 3)
+									{
+										if (roomList[i].getRoomName() == command[2] + " " + command[3])
+										{
+											targetIndex = i;
+										}
+									}
+									else if (roomList[i].getRoomName() == command[2])
+									{
+										targetIndex = i;
+									}
+									
+								}
+								std::list<std::string> poss = Imanager.getPossibleTargetRooms();
+								for (auto tRoom : poss)
+								{
+									if (command.size() > 3)
+									{
+										if (tRoom == command[2] + " " + command[3])
+										{
+											Rmanager.setCurrentRoom(roomList[targetIndex]);
+											Imanager = InputManager(Rmanager);
+											text.setString(Rmanager.getCurrentRoom().getStoryString());
+										}
+									}
+									else if (tRoom == command[2])
+									{
+										Rmanager.setCurrentRoom(roomList[targetIndex]);
+										Imanager = InputManager(Rmanager);
+										text.setString(Rmanager.getCurrentRoom().getStoryString());
+									}
+									else {
+										result.setString("You can't go there");
+									}
+									
+								}
+							}
+							else if (command[1] == "back")
+							{
+								int targetIndex = -1;
+								for (int i = 0; i < roomList.size(); i++)
+								{
+									if (roomList[i].getRoomName() == Rmanager.getCurrentRoom().getPreviousName())
+									{
+										targetIndex = i;
+									}
+								}
+								std::vector<Actions> poss = Imanager.getPossibleActions();
+								for (auto action: poss)
+								{
+									if (action == 1)
+									{
+										Rmanager.setCurrentRoom(roomList[targetIndex]);
+										Imanager = InputManager(Rmanager);
+										text.setString(Rmanager.getCurrentRoom().getStoryString());
+									}
+								}
+							}
 						}
 						else {
 							result.setString("You can't do that");

@@ -23,6 +23,7 @@ public: InputManager(RoomManager RManager); //TODO:add playermanager;
 		std::vector<Actions> getPossibleActions();
 		std::list<std::string> getPossibleTargetRooms();
 		std::list<Object> getPossibleTargetObjects();
+		void refresh(RoomManager RManager);
 private:
 	std::vector<Actions> possibleActions;
 	std::list<std::string> possibleTargetRooms;

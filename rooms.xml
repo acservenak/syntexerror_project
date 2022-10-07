@@ -4,7 +4,7 @@
 		<name>Mail</name>
 		<previousroomname>empty</previousroomname>
 		<nextrooms>
-			<roomname> Main Gate;no; </roomname>
+			<roomname> main Gate;no; </roomname>
 		</nextrooms>
 		<objects>
 			<object>main key;empty;</object>
@@ -13,11 +13,11 @@
 		<bgfilename>empty</bgfilename>
 	</room>
 	<room>
-		<name>Main Gate</name>
+		<name>main gate</name>
 		<previousroomname>empty</previousroomname>
 		<nextrooms>
-			<roomname> Garden;keypad; </roomname>
-			<roomname> Front door;keypad; </roomname>
+			<roomname>garden;keypad; </roomname>
+			<roomname>front door;keypad; </roomname>
 		</nextrooms>
 		<objects>
 			<object>keypad;7823; </object>
@@ -26,10 +26,10 @@
 		<bgfilename>empty</bgfilename>
 	</room>
 	<room>
-		<name>Garden</name>
-		<previousroomname>Main Gate</previousroomname>
+		<name>garden</name>
+		<previousroomname>main gate</previousroomname>
 		<nextrooms>
-			<roomname> Front door;no; </roomname>
+			<roomname> front door;no; </roomname>
 		</nextrooms>
 		<objects>
 			<object>lamp;empty;</object>
@@ -38,10 +38,10 @@
 		<bgfilename>empty</bgfilename>
 	</room>
 	<room>
-		<name>Front door</name>
-		<previousroomname>Main Gate</previousroomname>
+		<name>front door</name>
+		<previousroomname>main gate</previousroomname>
 		<nextrooms>
-			<roomname>Hall;keyhole;</roomname>
+			<roomname>hall;keyhole;</roomname>
 		</nextrooms>
 		<objects>
 			<object>keyhole;main key;</object>
@@ -50,15 +50,15 @@
 		<bgfilename>empty</bgfilename>
 	</room>
 	<room>
-		<name>Hall</name>
-		<previousroomname>Front door</previousroomname>
+		<name>hall</name>
+		<previousroomname>front door</previousroomname>
 		<nextrooms>
-			<roomname>Upstairs;no;</roomname>
-			<roomname>Library;no;</roomname>
-			<roomname>Office;no;</roomname>
-			<roomname>Kitchen;no;</roomname>
-			<roomname>Bathroom;no;</roomname>
-			<roomname>Pantry;no;</roomname>
+			<roomname>upstairs;no;</roomname>
+			<roomname>library;no;</roomname>
+			<roomname>office;no;</roomname>
+			<roomname>kitchen;no;</roomname>
+			<roomname>bathroom;no;</roomname>
+			<roomname>pantry;no;</roomname>
 		</nextrooms>
 		<objects>
 			<object>Pictures;empty;</object>

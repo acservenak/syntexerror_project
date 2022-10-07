@@ -11,7 +11,7 @@ InputManager::InputManager(RoomManager RManager) {
 	{
 		possibleActions.push_back(Actions::GOBACK);
 	}
-	std::vector<Object> objects = *currentRoom.getObjectList();
+	std::vector<Object> objects =*currentRoom.getObjectList();
 	std::list<std::string> nextrooms = currentRoom.getNextNames();
 	for (std::string room : nextrooms)
 	{
@@ -28,15 +28,15 @@ InputManager::InputManager(RoomManager RManager) {
 
 		if (params[1] == "no")
 		{
-			possibleTargetRooms.push_back(room);
+			possibleTargetRooms.push_back(params[0]);
 		}
 		for (int i = 0; i < objects.size(); i++)
 		{
-			if (objects[i].getName() == params[0])
+			if (objects[i].getName() == params[1])
 			{
 				if (objects[i].getIsUsed() == true)
 				{
-					possibleTargetRooms.push_back(room);
+					possibleTargetRooms.push_back(params[0]);
 				}
 			}
 		}
@@ -45,7 +45,7 @@ InputManager::InputManager(RoomManager RManager) {
 	for (Object object : objects)
 	{
 		possibleTargetObjects.push_back(object);
-		if (object.getName().find("key") > 0 && object.getName().find("key") < 15)
+		if (object.getName().find("key") > 0 && object.getName().find("key") < 15 && object.getName().find("keypad") > 100 )
 		{
 			possibleActions.push_back(Actions::PICKUP);
 		}
